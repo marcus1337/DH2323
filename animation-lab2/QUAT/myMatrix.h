@@ -26,11 +26,14 @@ class MyMatrix
 		void multiplyGLMatrix(void);
 		void setGLMatrix(void);
 	
-	private:
+	
 
 		void getGLMatrix(GLenum pname);
 
 		GLfloat myMatrix[16];
+
+private:
+
 };
 
 

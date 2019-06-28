@@ -1,7 +1,9 @@
 //Introductory quaternion class
 #include <math.h>
-#include "myvector.h"
+#include "myVector.h"
 #include "mymatrix.h"
+#include <string>
+#include <iostream>
 
 namespace MyMathLab
 {
@@ -27,6 +29,10 @@ class MyQuat
 
 		float w;
 		MyVector v;
+
+        std::string getStr() {
+            return "w: " + std::to_string(w) + " x: " + std::to_string(v.x) + " y: " + std::to_string(v.y) + " z: " + std::to_string(v.z);
+        }
 };
 
 
