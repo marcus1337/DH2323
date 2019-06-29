@@ -1,0 +1,28 @@
+﻿  tgaloader.cpp
+c:\users\bruno godefroy\documents\visual studio 2017\projects\particles6\tgaloader.cpp(221): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.15063.0\ucrt\stdio.h(207): note: see declaration of 'fopen'
+  particleSystem.cpp
+c:\users\bruno godefroy\documents\visual studio 2017\projects\particles6\particlesystem.cpp(174): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.15063.0\ucrt\string.h(136): note: see declaration of 'strcpy'
+  main.cpp
+c:\users\bruno godefroy\documents\visual studio 2017\projects\particles6\main.cpp(221): warning C4838: conversion from 'double' to 'GLfloat' requires a narrowing conversion
+  Generating Code...
+  Skipping... (no relevant changes detected)
+  myQuat.cpp
+  myMatrix.cpp
+main.obj : error LNK2019: unresolved external symbol __imp___glutInitWithExit referenced in function glutInit_ATEXIT_HACK
+main.obj : error LNK2019: unresolved external symbol __imp_glutInitDisplayMode referenced in function main
+main.obj : error LNK2019: unresolved external symbol __imp_glutInitWindowSize referenced in function main
+main.obj : error LNK2019: unresolved external symbol __imp_glutMainLoop referenced in function main
+main.obj : error LNK2019: unresolved external symbol __imp___glutCreateWindowWithExit referenced in function glutCreateWindow_ATEXIT_HACK
+main.obj : error LNK2019: unresolved external symbol __imp_glutPostRedisplay referenced in function "void __cdecl idle(void)" (?idle@@YAXXZ)
+main.obj : error LNK2019: unresolved external symbol __imp_glutSwapBuffers referenced in function "void __cdecl draw(void)" (?draw@@YAXXZ)
+main.obj : error LNK2019: unresolved external symbol __imp_glutReshapeWindow referenced in function main
+main.obj : error LNK2019: unresolved external symbol __imp_glutDisplayFunc referenced in function main
+main.obj : error LNK2019: unresolved external symbol __imp_glutReshapeFunc referenced in function main
+main.obj : error LNK2019: unresolved external symbol __imp_glutKeyboardFunc referenced in function main
+main.obj : error LNK2019: unresolved external symbol __imp_glutIdleFunc referenced in function main
+particleSystem.obj : error LNK2019: unresolved external symbol auxDIBImageLoadA referenced in function "public: int __cdecl CParticleSystem::Init(void)" (?Init@CParticleSystem@@QEAAHXZ)
+glut32.lib : warning LNK4272: library machine type 'X86' conflicts with target machine type 'x64'
+GLAUX.lib : warning LNK4272: library machine type 'X86' conflicts with target machine type 'x64'
+C:\Users\Bruno Godefroy\Documents\Visual Studio 2017\Projects\particles6\x64\Debug\particles6.exe : fatal error LNK1120: 13 unresolved externals
