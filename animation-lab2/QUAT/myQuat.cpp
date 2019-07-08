@@ -78,6 +78,17 @@ MyQuat MyQuat::getInverse(void) const {
     return tmp;
 }
 
+MyVector MyQuat::rotate(float angle, MyVector axis, MyVector vecToRotate) {
+    MyQuat q1(angle, axis);
+    MyQuat qvec(MyPosition(vecToRotate.x, vecToRotate.y, vecToRotate.z));
+    MyQuat q1Conj = q1.getConjugate();
+    MyQuat qrA = qvec.multiplyBy(q1Conj);
+    MyQuat qr = q1.multiplyBy(qrA);
+    MyVector rotatedVec(qr.v.x, qr.v.y, qr.v.z);
+    rotatedVec.setMagnitude(vecToRotate.getMagnitude());
+    return rotatedVec;
+}
+
 MyMatrix MyQuat::convertToRotationMatrix(void) const { //assume unit quaternion
     MyMatrix tmp;
     float z = v.z;

@@ -1,8 +1,11 @@
 //Introductory vector class
+
 #include <math.h>
 
-namespace MyMathLibrary
-{
+
+#ifndef _VECTOR_H
+#define _VECTOR_H
+
 
 	const double M_PI = 3.14159265358979323846;
 	const double M_HALF_PI = 1.57079632679489661923;
@@ -41,10 +44,28 @@ class MyVector
 		
 		void normalise(void);		
 
+		// New: Overloaded Operators...
+		MyVector operator + (const MyVector &other);
+		MyVector operator - (const MyVector &other);
+		MyVector operator * (const MyVector &other);
+		MyVector operator / (const MyVector &other);
+
+		MyVector operator * (const float scalar);
+		friend MyVector operator * (const float scalar, const MyVector &other);
+	    
+		MyVector& operator = (const MyVector &other);
+		MyVector& operator += (const MyVector &other);
+		MyVector& operator -= (const MyVector &other);
+
+		MyVector operator + (void) const;
+		MyVector operator - (void) const;
+
 		float x;
 		float y;
 		float z;
 };
 
 
-}
+
+
+#endif

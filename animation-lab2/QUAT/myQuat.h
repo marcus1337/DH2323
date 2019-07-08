@@ -27,6 +27,8 @@ class MyQuat
 
 		MyMatrix convertToRotationMatrix(void) const; 
 
+        static MyVector rotate(float angle, MyVector axis, MyVector vecToRotate);
+
 		float w;
 		MyVector v;
 

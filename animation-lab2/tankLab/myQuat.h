@@ -1,10 +1,8 @@
 //Introductory quaternion class
+
 #include <math.h>
 #include "myvector.h"
 #include "mymatrix.h"
-
-namespace MyMathLibrary
-{
 
 class MyQuat
 {
@@ -28,6 +26,3 @@ class MyQuat
 		float w;
 		MyVector v;
 };
-
-
-}
