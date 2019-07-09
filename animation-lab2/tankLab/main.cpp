@@ -222,18 +222,9 @@ float offZ = 19;
 
 void testCollision(float x, float y, float z) { //xyz should in a real program probably be added LAST, but we assume these to be 0,0,0
     bSphereBody.setTrans(x, y, z);
-
     bSphereTurret.setTrans(x, y, z);
-    bSphereTurret.addTrans(0, 12, 0);
-   // MyVector gunmainVec(bSphereTurret.transx, bSphereTurret.transy, bSphereTurret.transz);
-    //gunmainVec = MyQuat::rotate(rotMainTur, MyVector(0, 1, 0), gunmainVec);
-    //std::cout << "WHAT: " << gunmainVec.getStr() << " rotMainTur " << rotMainTur << std::endl;
 
-  //  bSphereGunMain.setTrans(bSphereTurret.transx, bSphereTurret.transy, bSphereTurret.transz);
-    //bSphereGunMain.setTrans(x, y, z);
-    //bSphereGunMain.addTrans(gunmainVec.x, 12, gunmainVec.z);
-    //glTranslatef(54, -102, 12);
-   // bSphereGunMain.addTrans(54, -102, 12);
+    bSphereTurret.addTrans(0, 12, 0);
 
     bSphereGunMain.setTrans(x, y, z);
     bSphereGunMain.addTrans(54+ bSphereGunMain.cx, 0, 13+ bSphereGunMain.cz);
@@ -244,25 +235,28 @@ void testCollision(float x, float y, float z) { //xyz should in a real program p
     MyVector lodRotVec = MyQuat::rotate(90, MyVector(0, 1, 0), MyVector(gunmainVec.x, gunmainVec.y, gunmainVec.z));
     lodRotVec = MyQuat::rotate(rot1stTur, lodRotVec, gunmainVec);
     lodRotVec.y += 12;
-    //lodRotVec.setMagnitude(lodRotVec.getMagnitude());
     bSphereGunMain.setTrans(lodRotVec.x, lodRotVec.y, lodRotVec.z);
-   // std::cout << "COORDS: " << gunmainVec.getStr() << " rotMainTur " << rotMainTur << std::endl;
-    //std::cout << "AAAAAA: " << lodRotVec.getStr() << " rotMainTur " << rotMainTur << std::endl;
 
-    //glTranslatef(15, 101, 19);
-    
-   // MyVector gunmainUpDown(bSphereGunMain.transx-(-22), bSphereGunMain.transy-11, bSphereGunMain.transz-22);
- //   gunmainUpDown = MyQuat::rotate(rot1stTur, MyVector(1, 0, 0), gunmainUpDown);
-    //bSphereGunMain.setTrans(gunmainUpDown.x+(-22), gunmainUpDown.y+11, gunmainUpDown.z+22);
-  //  std::cout << "OFX: " << offX << " OfY: " << offY << " OFZ: " << offZ << std::endl;
+    bSphereGunSecond.setTrans(0, 0, 0);
+    //MyVector rotVec = MyQuat::rotate(rot2ndTur, MyVector(0, 1, 0), MyVector(0, 0, -20));
+   // std::cout << "WAT " << rotVec.getStr() << std::endl;
+   // bSphereGunSecond.addTrans(-rotVec.x, 0, -rotVec.z);
+    // glTranslatef(-12, 17, -6);
 
-    //glRotatef(rot1stTur, 1.0, 0.0, 0.0);
 
-    //std::cout << "WHAT: " << gunmainVec.getStr() << " rotMainTur " << rotMainTur << std::endl;
+    bSphereGunSecond.addTrans(0, 0, 25);
+    MyVector gun2ndVec(bSphereGunSecond.transx, 0, bSphereGunSecond.transz);
+    gun2ndVec = MyQuat::rotate(rot2ndTur, MyVector(0, 1, 0), gun2ndVec);
+    bSphereGunSecond.setTrans(gun2ndVec.x-11, 25, gun2ndVec.z-16);
 
-   // bSphereGunSecond.addTrans(-12, 17, -6);
+    MyVector gunmainVec2(bSphereGunSecond.transx, 0, bSphereGunSecond.transz);
+    gunmainVec2 = MyQuat::rotate(rotMainTur, MyVector(0, 1, 0), gunmainVec2);
+    bSphereGunSecond.setTrans(gunmainVec2.x, 25, gunmainVec2.z);
+   
+    //std::cout << "TMP " << xtmp << " _ " << ztmp << std::endl;
+    // glRotatef(rot2ndTur, 0.0, 1.0, 0.0);
 
-    //glTranslatef(-24, -11, -56); -- +- Z
+
     for (int i = 0; i < 14; i++)
         bSphereWheel[i].setTrans(x, y, z);
 
@@ -299,8 +293,8 @@ void testCollision(float x, float y, float z) { //xyz should in a real program p
 
    // bSphereBody.draw();
    // bSphereTurret.draw();
-    bSphereGunMain.draw();
-   // bSphereGunSecond.draw();
+    //bSphereGunMain.draw();
+    bSphereGunSecond.draw();
     //for (int i = 0; i < 14; i++)
      //   bSphereWheel[i].draw();
 }
@@ -344,7 +338,7 @@ void draw_tank(float x, float y, float z)
             glRotatef(rot2ndTur, 0.0, 1.0, 0.0);
             glTranslatef(0, 0, 10);
             glCallList(secondTurretID);
-        //    bSphereGunSecond.draw();
+          //  bSphereGunSecond.draw();
             //std::cout << "X: " << xtmp << " Y: " << ytmp << " Z: " << ztmp << std::endl;
         glPopMatrix();
     glPopMatrix();
