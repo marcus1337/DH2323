@@ -258,10 +258,10 @@ void testCollision(float x, float y, float z) { //xyz should in a real program p
 
 
     for (int i = 0; i < 14; i++)
-        bSphereWheel[i].setTrans(x, y, z);
+        bSphereWheel[i].setTrans(x-10, y, z);
 
     for (int i = 0; i < 7; i++) {
-        bSphereWheel[i].addTrans(-24, -11, -56);
+        bSphereWheel[i].addTrans(-20, -11, -56);
         bSphereWheel[i].addTrans(0, 0, 15 * (i));
     }
     for (int i = 7; i < 14; i++) {
@@ -272,31 +272,31 @@ void testCollision(float x, float y, float z) { //xyz should in a real program p
   //  std::cout << "X: " << xtmp << " Y: " << ytmp << " Z: " << ztmp << " ::" << bSphereBody.collision << "::" << std::endl;
 
     if (bSphereBody.checkCollision(xtmp, ytmp, ztmp)) {
-      //  std::cout << "Outer Bound Hit! " << std::endl;
+        std::cout << "Outer Bound Hit! " << std::endl;
 
         if(bSphereTurret.checkCollision(xtmp, ytmp, ztmp)) {
-       //    std::cout << "TURRET " << bSphereTurret.getCoordStr() << std::endl;
+           std::cout << "TURRET " << bSphereTurret.getCoordStr() << std::endl;
         }
 
         if(bSphereGunMain.checkCollision(xtmp, ytmp, ztmp)) {
-     //      std::cout << "GUN_1 " << bSphereGunMain.getCoordStr() << std::endl;
+           std::cout << "GUN_1 " << bSphereGunMain.getCoordStr() << std::endl;
         }
         if(bSphereGunSecond.checkCollision(xtmp, ytmp, ztmp)) {
-       //     std::cout << "GUN_2 " << bSphereGunSecond.getCoordStr() << std::endl;
+            std::cout << "GUN_2 " << bSphereGunSecond.getCoordStr() << std::endl;
         }
 
         for (int i = 0; i < 14; i++)
             if(bSphereWheel[i].checkCollision(xtmp, ytmp, ztmp)) {
-           //     std::cout << "WHEEL_" << i << std::endl;
+                std::cout << "WHEEL_" << i << std::endl;
             }
     }
 
    // bSphereBody.draw();
    // bSphereTurret.draw();
     //bSphereGunMain.draw();
-    bSphereGunSecond.draw();
-    //for (int i = 0; i < 14; i++)
-     //   bSphereWheel[i].draw();
+   // bSphereGunSecond.draw();
+    for (int i = 0; i < 14; i++)
+        bSphereWheel[i].draw();
 }
 
 void drawProjectile() {
