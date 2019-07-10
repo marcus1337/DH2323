@@ -221,42 +221,63 @@ float offY = 101;
 float offZ = 19;
 
 //https://stackoverflow.com/a/9368901/7202012
+//https://stackoverflow.com/a/52792014/7202012
 void testLineCollision(MyVector p1, MyVector p2) {
     if (p2 == p1)
         return;
     MyVector t = p1.subtractFrom(p2);
     MyVector b1 = MyVector::closestPointToLine(p1, p2, MyVector(bSphereBody.transx, bSphereBody.transy, bSphereBody.transz));
+    MyVector b2 = MyVector::closestPointToLine(p1, p2, MyVector(bSphereTurret.transx, bSphereTurret.transy, bSphereTurret.transz));
+    MyVector b3 = MyVector::closestPointToLine(p1, p2, MyVector(bSphereGunMain.transx, bSphereGunMain.transy, bSphereGunMain.transz));
+    MyVector b4 = MyVector::closestPointToLine(p1, p2, MyVector(bSphereGunSecond.transx, bSphereGunSecond.transy, bSphereGunSecond.transz));
+    MyVector bwheels[14];
+    for(int i = 0; i < 14; i++) {
+        bwheels[i] = MyVector::closestPointToLine(p1, p2, MyVector(bSphereWheel[i].transx, bSphereWheel[i].transy, bSphereWheel[i].transz));
+    }
 
-    /*if (bSphereBody.checkCollision(ball.x, ball.y, ball.z)) {
+    if (bSphereBody.checkCollision(b1.x, b1.y, b1.z)) {
         std::cout << "Outer Bound Hit! " << std::endl;
 
-        if (bSphereTurret.checkCollision(ball.x, ball.y, ball.z)) {
+        if (bSphereTurret.checkCollision(b2.x, b2.y, b2.z)) {
             std::cout << "TURRET " << bSphereTurret.getCoordStr() << std::endl;
         }
 
-        if (bSphereGunMain.checkCollision(ball.x, ball.y, ball.z)) {
+        if (bSphereGunMain.checkCollision(b3.x, b3.y, b3.z)) {
             std::cout << "GUN_1 " << bSphereGunMain.getCoordStr() << std::endl;
         }
-        if (bSphereGunSecond.checkCollision(ball.x, ball.y, ball.z)) {
+        if (bSphereGunSecond.checkCollision(b4.x, b4.y, b4.z)) {
             std::cout << "GUN_2 " << bSphereGunSecond.getCoordStr() << std::endl;
         }
 
         for (int i = 0; i < 14; i++)
-            if (bSphereWheel[i].checkCollision(ball.x, ball.y, ball.z)) {
+            if (bSphereWheel[i].checkCollision(bwheels[i].x, bwheels[i].y, bwheels[i].z)) {
                 std::cout << "WHEEL_" << i << std::endl;
             }
-    }*/
+    }
 
     glLineWidth(7.0f);
     glColor4f(1, 0.5, 1, 0);
 
+    //drawSphere(p1.x, p1.y, p1.z);
+   // drawSphere(p2.x, p2.y, p2.z);
+
     glPushMatrix();
         glScalef(0.1, 0.1, 0.1);
         glBegin(GL_LINES);
-        glVertex3f(p2.x+ t.x*100, p2.y+ t.y*100, p2.z+ t.z*100);
         glVertex3f(p1.x + t.x*-100, p1.y + t.y*-100, p1.z + t.z*-100);
+        glVertex3f(p1.x+ t.x*100, p1.y+ t.y*100, p1.z+ t.z*100);
         glEnd();    
     glPopMatrix();
+
+   // std::cout << "X: " << xtmp << " Y: " << ytmp << " Z: " << ztmp << " ::" << bSphereBody.collision << "::" << std::endl;
+    //bSphereBody.draw();
+   //  bSphereTurret.draw();
+     bSphereGunMain.draw();
+    // bSphereGunSecond.draw();
+   // for (int i = 0; i < 14; i++)
+    //    bSphereWheel[i].draw();
+
+     //drawSphere(bSphereGunMain.transx, bSphereGunMain.transy, bSphereGunMain.transz);
 }
 
 void prepareTranslationsSpheres(float x, float y, float z) { //xyz should in a real program probably be added LAST, but we assume these to be 0,0,0
@@ -302,7 +323,7 @@ void prepareTranslationsSpheres(float x, float y, float z) { //xyz should in a r
 void testCollision(float x, float y, float z, MyVector ball) { //xyz should in a real program probably be added LAST, but we assume these to be 0,0,0
 
 
-  //  std::cout << "X: " << xtmp << " Y: " << ytmp << " Z: " << ztmp << " ::" << bSphereBody.collision << "::" << std::endl;
+ //   std::cout << "X: " << xtmp << " Y: " << ytmp << " Z: " << ztmp << " ::" << bSphereBody.collision << "::" << std::endl;
 
     if (bSphereBody.checkCollision(ball.x, ball.y, ball.z)) {
         std::cout << "Outer Bound Hit! " << std::endl;
@@ -324,7 +345,7 @@ void testCollision(float x, float y, float z, MyVector ball) { //xyz should in a
             }
     }
 
-    bSphereBody.draw();
+   // bSphereBody.draw();
    // bSphereTurret.draw();
     //bSphereGunMain.draw();
    // bSphereGunSecond.draw();
@@ -433,7 +454,7 @@ void draw(void)
   glRotatef(xPos, 1.0, 0.0, 0.0);
 
   prepareTranslationsSpheres(0,0,0);
-  testLineCollision(MyVector(-100,-0,-0), MyVector(xtmp,ytmp,ztmp) );
+  testLineCollision(MyVector(-150,-0,-0), MyVector(xtmp,ytmp,ztmp) );
  // testCollision(0, 0, 0, MyVector(-1000,-1000,0));
  // drawProjectile();
   draw_tank(0.0, 0.0, 0.0);

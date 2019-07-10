@@ -46,12 +46,15 @@ MyVector MyVector::subtractFrom(const MyVector &other) const
 MyVector MyVector::closestPointToLine(MyVector p1, MyVector p2, MyVector Q) {
     MyVector t = p1.subtractFrom(p2); //t == u
     t.normalise();
-    MyVector PQ1 = Q.subtractFrom(p1);
-    float tmag = t.getMagnitude();
-    float w1Tmp = (PQ1.getDotProduct(t) / (tmag* tmag));
-    MyVector w1 = t.scalarMulti(w1Tmp);
-    MyVector w2 = w1.subtractFrom(PQ1);
-    return w2;
+    MyVector PQ1 = p1.subtractFrom(Q);
+
+    MyVector tmpV = t.scalarMulti(PQ1.getDotProduct(t));
+    MyVector X = p1.addTo(tmpV);
+    //float tmag = t.getMagnitude();
+    //float w1Tmp = (PQ1.getDotProduct(t) / (tmag* tmag));
+    //MyVector w1 = t.scalarMulti(w1Tmp);
+    //MyVector w2 = w1.subtractFrom(PQ1);
+    return X;
 }
 
 float MyVector::getMagnitude(void) const
