@@ -29,6 +29,11 @@ MyVector MyVector::addTo(const MyVector &other) const
     return result;
 }
 
+MyVector MyVector::scalarMulti(float scalarTmp) {
+    MyVector result(x*scalarTmp,y*scalarTmp,z*scalarTmp);
+    return result;
+}
+
 MyVector MyVector::subtractFrom(const MyVector &other) const
 {
     MyVector result;
@@ -36,6 +41,17 @@ MyVector MyVector::subtractFrom(const MyVector &other) const
     result.y = other.y - this->y;
     result.z = other.z - this->z;
     return result;
+}
+
+MyVector MyVector::closestPointToLine(MyVector p1, MyVector p2, MyVector Q) {
+    MyVector t = p1.subtractFrom(p2); //t == u
+    t.normalise();
+    MyVector PQ1 = Q.subtractFrom(p1);
+    float tmag = t.getMagnitude();
+    float w1Tmp = (PQ1.getDotProduct(t) / (tmag* tmag));
+    MyVector w1 = t.scalarMulti(w1Tmp);
+    MyVector w2 = w1.subtractFrom(PQ1);
+    return w2;
 }
 
 float MyVector::getMagnitude(void) const

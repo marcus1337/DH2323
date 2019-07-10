@@ -54,7 +54,7 @@ void reshape(int width, int height);      //when the window is resized
 void init_drawing(void);                  //drawing intialisation
 
 void sphereTests();
-
+void drawSphere(float x, float y, float z);
 void customDraw(ObjMesh* pMesh);
 
 //our main routine
@@ -220,14 +220,53 @@ float offX = 15;
 float offY = 101;
 float offZ = 19;
 
-void testCollision(float x, float y, float z) { //xyz should in a real program probably be added LAST, but we assume these to be 0,0,0
+//https://stackoverflow.com/a/9368901/7202012
+void testLineCollision(MyVector p1, MyVector p2) {
+    if (p2 == p1)
+        return;
+    MyVector t = p1.subtractFrom(p2);
+    MyVector b1 = MyVector::closestPointToLine(p1, p2, MyVector(bSphereBody.transx, bSphereBody.transy, bSphereBody.transz));
+
+    /*if (bSphereBody.checkCollision(ball.x, ball.y, ball.z)) {
+        std::cout << "Outer Bound Hit! " << std::endl;
+
+        if (bSphereTurret.checkCollision(ball.x, ball.y, ball.z)) {
+            std::cout << "TURRET " << bSphereTurret.getCoordStr() << std::endl;
+        }
+
+        if (bSphereGunMain.checkCollision(ball.x, ball.y, ball.z)) {
+            std::cout << "GUN_1 " << bSphereGunMain.getCoordStr() << std::endl;
+        }
+        if (bSphereGunSecond.checkCollision(ball.x, ball.y, ball.z)) {
+            std::cout << "GUN_2 " << bSphereGunSecond.getCoordStr() << std::endl;
+        }
+
+        for (int i = 0; i < 14; i++)
+            if (bSphereWheel[i].checkCollision(ball.x, ball.y, ball.z)) {
+                std::cout << "WHEEL_" << i << std::endl;
+            }
+    }*/
+
+    glLineWidth(7.0f);
+    glColor4f(1, 0.5, 1, 0);
+
+    glPushMatrix();
+        glScalef(0.1, 0.1, 0.1);
+        glBegin(GL_LINES);
+        glVertex3f(p2.x+ t.x*100, p2.y+ t.y*100, p2.z+ t.z*100);
+        glVertex3f(p1.x + t.x*-100, p1.y + t.y*-100, p1.z + t.z*-100);
+        glEnd();    
+    glPopMatrix();
+}
+
+void prepareTranslationsSpheres(float x, float y, float z) { //xyz should in a real program probably be added LAST, but we assume these to be 0,0,0
     bSphereBody.setTrans(x, y, z);
     bSphereTurret.setTrans(x, y, z);
 
     bSphereTurret.addTrans(0, 12, 0);
 
     bSphereGunMain.setTrans(x, y, z);
-    bSphereGunMain.addTrans(54+ bSphereGunMain.cx, 0, 13+ bSphereGunMain.cz);
+    bSphereGunMain.addTrans(54 + bSphereGunMain.cx, 0, 13 + bSphereGunMain.cz);
     MyVector gunmainVec(bSphereGunMain.transx, 0, bSphereGunMain.transz);
     gunmainVec = MyQuat::rotate(rotMainTur, MyVector(0, 1, 0), gunmainVec);
     bSphereGunMain.setTrans(gunmainVec.x, 12, gunmainVec.z);
@@ -238,27 +277,17 @@ void testCollision(float x, float y, float z) { //xyz should in a real program p
     bSphereGunMain.setTrans(lodRotVec.x, lodRotVec.y, lodRotVec.z);
 
     bSphereGunSecond.setTrans(0, 0, 0);
-    //MyVector rotVec = MyQuat::rotate(rot2ndTur, MyVector(0, 1, 0), MyVector(0, 0, -20));
-   // std::cout << "WAT " << rotVec.getStr() << std::endl;
-   // bSphereGunSecond.addTrans(-rotVec.x, 0, -rotVec.z);
-    // glTranslatef(-12, 17, -6);
-
-
     bSphereGunSecond.addTrans(0, 0, 25);
     MyVector gun2ndVec(bSphereGunSecond.transx, 0, bSphereGunSecond.transz);
     gun2ndVec = MyQuat::rotate(rot2ndTur, MyVector(0, 1, 0), gun2ndVec);
-    bSphereGunSecond.setTrans(gun2ndVec.x-11, 25, gun2ndVec.z-16);
+    bSphereGunSecond.setTrans(gun2ndVec.x - 11, 25, gun2ndVec.z - 16);
 
     MyVector gunmainVec2(bSphereGunSecond.transx, 0, bSphereGunSecond.transz);
     gunmainVec2 = MyQuat::rotate(rotMainTur, MyVector(0, 1, 0), gunmainVec2);
     bSphereGunSecond.setTrans(gunmainVec2.x, 25, gunmainVec2.z);
-   
-    //std::cout << "TMP " << xtmp << " _ " << ztmp << std::endl;
-    // glRotatef(rot2ndTur, 0.0, 1.0, 0.0);
-
 
     for (int i = 0; i < 14; i++)
-        bSphereWheel[i].setTrans(x-10, y, z);
+        bSphereWheel[i].setTrans(x - 10, y, z);
 
     for (int i = 0; i < 7; i++) {
         bSphereWheel[i].addTrans(-20, -11, -56);
@@ -266,37 +295,54 @@ void testCollision(float x, float y, float z) { //xyz should in a real program p
     }
     for (int i = 7; i < 14; i++) {
         bSphereWheel[i].addTrans(40, -11, 35);
-        bSphereWheel[i].addTrans(0, 0, -15 * (i-7));
+        bSphereWheel[i].addTrans(0, 0, -15 * (i - 7));
     }
+}
+
+void testCollision(float x, float y, float z, MyVector ball) { //xyz should in a real program probably be added LAST, but we assume these to be 0,0,0
+
 
   //  std::cout << "X: " << xtmp << " Y: " << ytmp << " Z: " << ztmp << " ::" << bSphereBody.collision << "::" << std::endl;
 
-    if (bSphereBody.checkCollision(xtmp, ytmp, ztmp)) {
+    if (bSphereBody.checkCollision(ball.x, ball.y, ball.z)) {
         std::cout << "Outer Bound Hit! " << std::endl;
 
-        if(bSphereTurret.checkCollision(xtmp, ytmp, ztmp)) {
+        if(bSphereTurret.checkCollision(ball.x, ball.y, ball.z)) {
            std::cout << "TURRET " << bSphereTurret.getCoordStr() << std::endl;
         }
 
-        if(bSphereGunMain.checkCollision(xtmp, ytmp, ztmp)) {
+        if(bSphereGunMain.checkCollision(ball.x, ball.y, ball.z)) {
            std::cout << "GUN_1 " << bSphereGunMain.getCoordStr() << std::endl;
         }
-        if(bSphereGunSecond.checkCollision(xtmp, ytmp, ztmp)) {
+        if(bSphereGunSecond.checkCollision(ball.x, ball.y, ball.z)) {
             std::cout << "GUN_2 " << bSphereGunSecond.getCoordStr() << std::endl;
         }
 
         for (int i = 0; i < 14; i++)
-            if(bSphereWheel[i].checkCollision(xtmp, ytmp, ztmp)) {
+            if(bSphereWheel[i].checkCollision(ball.x, ball.y, ball.z)) {
                 std::cout << "WHEEL_" << i << std::endl;
             }
     }
 
-   // bSphereBody.draw();
+    bSphereBody.draw();
    // bSphereTurret.draw();
     //bSphereGunMain.draw();
    // bSphereGunSecond.draw();
     for (int i = 0; i < 14; i++)
         bSphereWheel[i].draw();
+}
+
+void drawSphere(float x, float y, float z) {
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+        glColor4f(0, 1, 0.5, 0.5);
+        glPushMatrix();
+        glScalef(0.1, 0.1, 0.1);
+        glTranslatef(x, y, z);
+        glutSolidSphere(6, 55, 55);
+        glPopMatrix();
+        glColor4f(1, 1, 1, 0);
+        glDisable(GL_BLEND);
 }
 
 void drawProjectile() {
@@ -386,8 +432,10 @@ void draw(void)
   glRotatef(yRot,0.0,1.0,0.0);
   glRotatef(xPos, 1.0, 0.0, 0.0);
 
-  testCollision(0, 0, 0);
-  drawProjectile();
+  prepareTranslationsSpheres(0,0,0);
+  testLineCollision(MyVector(-100,-0,-0), MyVector(xtmp,ytmp,ztmp) );
+ // testCollision(0, 0, 0, MyVector(-1000,-1000,0));
+ // drawProjectile();
   draw_tank(0.0, 0.0, 0.0);
   //customDraw(tankMainGun);
 

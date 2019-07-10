@@ -40,6 +40,9 @@ namespace MyMathLab
         static float getAngle(MyVector avec, MyVector bvec);
         static float pointDist(MyPosition a, MyPosition b);
 
+        static void sortSwap(MyVector& avec, MyVector& bvec);
+        static MyVector closestPointToLine(MyVector p1, MyVector p2, MyVector Q);
+
 
         float getDotProduct(const MyVector &other) const;
 
@@ -51,6 +54,12 @@ namespace MyMathLab
         MyPosition toPos() {
             return MyPosition(x, y, z);
         }
+
+        bool operator==(const MyVector& otherVec) {
+            return otherVec.x == x && otherVec.y == y && otherVec.z == z;
+        }
+
+        MyVector scalarMulti(float scalarTmp);
 
         float x;
         float y;
