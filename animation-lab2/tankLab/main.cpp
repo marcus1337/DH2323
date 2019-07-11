@@ -32,7 +32,15 @@ ObjMesh* tankMainGun;
 ObjMesh* tankSecondaryGun;
 ObjMesh* tankWheel;
 
+ObjMesh* tankBodyLow;
+ObjMesh* tankTurretLow;
+ObjMesh* tankMainGunLow;
+ObjMesh* tankSecondaryGunLow;
+ObjMesh* tankWheelLow;
+
 void load_tank_objs(void);
+void load_low_level_tank_objs();
+
 
 float xPos = 0.0;
 float zPos = -30.0;
@@ -47,6 +55,7 @@ float rot1stTur = 0;
 float rot2ndTur = 0;
 
 int tankBodyID, mainTurretID, firstTurretID, secondTurretID, WheelID;
+int tankBodyIDLow, mainTurretIDLow, firstTurretIDLow, secondTurretIDLow, WheelIDLow;
 
 //prototypes for our callback functions
 void draw(void);    //our drawing routine
@@ -81,6 +90,7 @@ int main(int argc, char *argv[])
   particles.init();
   init_drawing();
   load_tank_objs();
+  load_low_level_tank_objs();
   sphereTests();
 
   //tell glut the names of our callback functions point to our 
@@ -96,6 +106,46 @@ int main(int argc, char *argv[])
 
   glutMainLoop();
   return 0;
+}
+
+void load_low_level_tank_objs() {
+    tankBodyLow = LoadOBJ(".\\tankobjs\\tankbodyLow.obj");
+    tankTurretLow = LoadOBJ(".\\tankobjs\\tankturretLow.obj");
+    tankMainGunLow = LoadOBJ(".\\tankobjs\\tankmaingunLow.obj");
+    tankSecondaryGunLow = LoadOBJ(".\\tankobjs\\tanksecondarygunLow.obj");
+    tankWheelLow = LoadOBJ(".\\tankobjs\\tankwheelLow.obj");
+    //SetTextures(tankBodyLow->m_iMeshID, NULL, ".\\tankobjs\\texture.tga");
+
+    tankBodyIDLow = glGenLists(5);
+    mainTurretIDLow = tankBodyIDLow + 1;
+    firstTurretIDLow = mainTurretIDLow + 1;
+    secondTurretIDLow = firstTurretIDLow + 1;
+    WheelIDLow = secondTurretIDLow + 1;
+
+    glNewList(tankBodyIDLow, GL_COMPILE);
+    glColor3ub(49, 41, 30);
+    DrawOBJ(tankBodyLow->m_iMeshID);
+    glEndList();
+
+    glNewList(mainTurretIDLow, GL_COMPILE);
+    glColor3ub(69, 41, 30);
+    DrawOBJ(tankTurretLow->m_iMeshID);
+    glEndList();
+
+    glNewList(firstTurretIDLow, GL_COMPILE);
+    glColor3ub(69, 51, 30);
+    DrawOBJ(tankMainGunLow->m_iMeshID);
+    glEndList();
+
+    glNewList(secondTurretIDLow, GL_COMPILE);
+    glColor3ub(29, 61, 30);
+    DrawOBJ(tankSecondaryGunLow->m_iMeshID);
+    glEndList();
+
+    glNewList(WheelIDLow, GL_COMPILE);
+    glColor3ub(24,22, 0);
+    DrawOBJ(tankWheelLow->m_iMeshID);
+    glEndList();
 }
 
 void load_tank_objs(void)
@@ -169,39 +219,6 @@ void customDraw(ObjMesh* pMesh) {
 
 
 }
-
-/*using namespace MyMathLab;
-
-void DrawVector(MyPosition& startPos, MyVector& v1, float red = 1.0f, float green = 1.0f, float blue = 1.0f, bool isLine = false)
-{
-    float length = sqrt((v1.x * v1.x) + (v1.y * v1.y) + (v1.z * v1.z));
-    MyVector v;
-    if (length > 0.0) { v.x = v1.x / length; v.y = v1.y / length; v.z = v1.z / length; }
-    else return;
-    float d = (v.x * 0.0) + (v.y * 1.0) + (v.z * 0.0);
-    float a = RAD2DEG(acos(d));
-    if (v.x > 0.0) a = -a;
-
-    glPushMatrix();
-    glTranslatef(startPos.x, startPos.y, startPos.z);
-    glRotatef(a, 0.0, 0.0, 1.0);
-    float space = 0.25;
-
-    glBegin(GL_LINES);
-    glColor3f(red, green, blue);
-    glVertex3f(0.0, 0.0, 0.0);
-    glVertex3f(0.0, length, 0.0);
-
-    if (!isLine) {
-        glVertex3f(0.0, length, 0.0);
-        glVertex3f(-space, length - (space * 1.5), 0.0);
-        glVertex3f(0.0, length, 0.0);
-        glVertex3f(space, length - (space * 1.5), 0.0);
-    }
-
-    glEnd();
-    glPopMatrix();
-}*/
 
 BoundingSphere bSphereBody;
 BoundingSphere bSphereTurret;
@@ -385,9 +402,69 @@ void drawProjectile() {
     glColor4f(1, 1, 1, 0);
 }
 
+void draw_tank_low(float x, float y, float z)
+{
+  //  glBindTexture(GL_TEXTURE_2D, tankBody->m_BaseTexture);
+    glDisable(GL_TEXTURE_2D); // d i s a b l e l i g h t i n g
+    glDisable(GL_LIGHTING); // d i s a b l e t e x t u ri n g
+
+    glPushMatrix();
+    glTranslatef(x, y, z);
+    glScalef(0.1, 0.1, 0.1);
+    glCallList(tankBodyIDLow);
+
+    glPushMatrix(); //TURRET
+    glRotatef(rotMainTur, 0.0, 1.0, 0.0);
+    glTranslatef(0, 12, 0);
+    glCallList(mainTurretIDLow);
+
+    glPushMatrix();
+    glTranslatef(54, -102, 12);
+    glTranslatef(15, 101, 19);
+    glRotatef(rot1stTur, 1.0, 0.0, 0.0);
+    glTranslatef(-15, -101, -19);
+    glCallList(firstTurretIDLow);
+
+    glPopMatrix();
+    glPushMatrix();
+    glTranslatef(-12, 17, -6);
+    glTranslatef(0, 0, -10);
+    glRotatef(rot2ndTur, 0.0, 1.0, 0.0);
+    glTranslatef(0, 0, 10);
+    glCallList(secondTurretIDLow);
+
+    glPopMatrix();
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(-27, -11, -56);
+    glCallList(WheelIDLow);
+
+    for (int i = 0; i < 6; i++) {
+        glTranslatef(0, 0, 15);
+        glCallList(WheelIDLow);
+    }
+    glPopMatrix();
+    glPushMatrix();
+    glRotatef(180, 0.0, 1.0, 0.0);
+    glTranslatef(-27, -11, 56);
+    glCallList(WheelIDLow);
+    for (int i = 0; i < 6; i++) {
+        glTranslatef(0, 0, -15);
+        glCallList(WheelIDLow);
+    }
+    glPopMatrix();
+
+    glPopMatrix();
+}
+
 void draw_tank(float x, float y, float z)
 {
+    glDisable(GL_TEXTURE_2D); // d i s a b l e l i g h t i n g
+    glDisable(GL_LIGHTING); // d i s a b l e t e x t u ri n g
     glBindTexture(GL_TEXTURE_2D, tankBody->m_BaseTexture);
+    glEnable(GL_TEXTURE_2D); // d i s a b l e l i g h t i n g
+    glEnable(GL_LIGHTING); // d i s a b l e t e x t u ri n g
 
 	glPushMatrix();
 
@@ -469,8 +546,13 @@ void draw(void)
   particles.activated1 = testCollision(0, 0, 0, MyVector(xtmp, ytmp, ztmp));
 
   drawProjectile();
-  draw_tank(0.0, 0.0, 0.0);
-  particles.draw(xtmp, ytmp, ztmp);
+
+  if(ztmp > -200)
+    draw_tank(xtmp, ytmp, ztmp);
+  else
+    draw_tank_low(xtmp, ytmp, ztmp);
+
+  //particles.draw(xtmp, ytmp, ztmp);
 
   //customDraw(tankMainGun);
 
