@@ -79,7 +79,7 @@ void BoundingSphere::draw() {
  //       return;
 
     glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE);
     glColor4f(1, 1, 0.5, 0.5);
     if(collision)
         glColor4f(1, 0, 0, 0.5);

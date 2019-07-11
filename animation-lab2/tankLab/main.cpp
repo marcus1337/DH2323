@@ -301,12 +301,13 @@ void testLineCollision(MyVector p1, MyVector p2) {
 }
 
 void prepareTranslationsSpheres(float x, float y, float z) { //xyz should in a real program probably be added LAST, but we assume these to be 0,0,0
-    bSphereBody.setTrans(x, y, z);
-    bSphereTurret.setTrans(x, y, z);
+    bSphereBody.setTrans(0, 0, 0);
+    bSphereTurret.setTrans(0, 0, 0);
+    bSphereGunMain.setTrans(0, 0, 0);
+    bSphereGunSecond.setTrans(0, 0, 0);
 
     bSphereTurret.addTrans(0, 12, 0);
 
-    bSphereGunMain.setTrans(x, y, z);
     bSphereGunMain.addTrans(54 + bSphereGunMain.cx, 0, 13 + bSphereGunMain.cz);
     MyVector gunmainVec(bSphereGunMain.transx, 0, bSphereGunMain.transz);
     gunmainVec = MyQuat::rotate(rotMainTur, MyVector(0, 1, 0), gunmainVec);
@@ -317,7 +318,6 @@ void prepareTranslationsSpheres(float x, float y, float z) { //xyz should in a r
     lodRotVec.y += 12;
     bSphereGunMain.setTrans(lodRotVec.x, lodRotVec.y, lodRotVec.z);
 
-    bSphereGunSecond.setTrans(0, 0, 0);
     bSphereGunSecond.addTrans(0, 0, 25);
     MyVector gun2ndVec(bSphereGunSecond.transx, 0, bSphereGunSecond.transz);
     gun2ndVec = MyQuat::rotate(rot2ndTur, MyVector(0, 1, 0), gun2ndVec);
@@ -328,7 +328,7 @@ void prepareTranslationsSpheres(float x, float y, float z) { //xyz should in a r
     bSphereGunSecond.setTrans(gunmainVec2.x, 25, gunmainVec2.z);
 
     for (int i = 0; i < 14; i++)
-        bSphereWheel[i].setTrans(x - 10, y, z);
+        bSphereWheel[i].setTrans(-10, 0, 0);
 
     for (int i = 0; i < 7; i++) {
         bSphereWheel[i].addTrans(-20, -11, -56);
@@ -338,6 +338,14 @@ void prepareTranslationsSpheres(float x, float y, float z) { //xyz should in a r
         bSphereWheel[i].addTrans(40, -11, 35);
         bSphereWheel[i].addTrans(0, 0, -15 * (i - 7));
     }
+
+    bSphereBody.addTrans(x*10, y * 10, z * 10);
+    bSphereTurret.addTrans(x * 10, y * 10, z * 10);
+    bSphereGunMain.addTrans(x * 10, y * 10, z * 10);
+    bSphereGunSecond.addTrans(x * 10, y * 10, z * 10);
+    for (int i = 0; i < 14; i++)
+        bSphereWheel[i].addTrans(x * 10, y * 10, z * 10);
+
 }
 
 bool testCollision(float x, float y, float z, MyVector ball) { //xyz should in a real program probably be added LAST, but we assume these to be 0,0,0
@@ -346,8 +354,7 @@ bool testCollision(float x, float y, float z, MyVector ball) { //xyz should in a
 
     if (bSphereBody.checkCollision(ball.x, ball.y, ball.z)) {
         std::cout << "Outer Bound Hit! " << std::endl;
-        return true;
-
+        result = true;
         if(bSphereTurret.checkCollision(ball.x, ball.y, ball.z)) {
            std::cout << "TURRET " << bSphereTurret.getCoordStr() << std::endl;
            result = true;
@@ -370,9 +377,9 @@ bool testCollision(float x, float y, float z, MyVector ball) { //xyz should in a
     }
 
    // bSphereBody.draw();
-   // bSphereTurret.draw();
-    //bSphereGunMain.draw();
-   // bSphereGunSecond.draw();
+  //  bSphereTurret.draw();
+    bSphereGunMain.draw();
+    bSphereGunSecond.draw();
     for (int i = 0; i < 14; i++)
         bSphereWheel[i].draw();
 
@@ -541,7 +548,7 @@ void draw(void)
   glRotatef(yRot,0.0,1.0,0.0);
   glRotatef(xPos, 1.0, 0.0, 0.0);
 
-  prepareTranslationsSpheres(0,0,0);
+  prepareTranslationsSpheres(xtmp,ytmp,ztmp);
   //testLineCollision(MyVector(-150,-0,-0), MyVector(xtmp,ytmp,ztmp) );
   particles.activated1 = testCollision(0, 0, 0, MyVector(xtmp, ytmp, ztmp));
 
@@ -550,7 +557,7 @@ void draw(void)
   if(ztmp > -200)
     draw_tank(xtmp, ytmp, ztmp);
   else
-    draw_tank_low(xtmp, ytmp, ztmp);
+    draw_tank_low(0, 0, 0);
 
   //particles.draw(xtmp, ytmp, ztmp);
 
@@ -568,7 +575,7 @@ void idle(void)
   //since there are no animations in this test, we can leave 
   //idle() empty
    particles.onIdle();
-   glutPostRedisplay();
+ //  glutPostRedisplay();
 }
 
 //key callback function - called whenever the user presses a 
