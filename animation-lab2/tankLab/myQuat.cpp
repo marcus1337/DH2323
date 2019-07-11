@@ -1,6 +1,10 @@
 #include "MyQuat.h"
+#include <iostream>
+#include <math.h>
+#include "myVector.h"
+#include "mymatrix.h"
 
-using namespace MyMathLab;
+using namespace MyMathLibrary;
 
 MyQuat::MyQuat() {
     w = 0;
@@ -107,4 +111,8 @@ MyMathLibrary::MyMatrix MyQuat::convertToRotationMatrix(void) const { //assume u
     tmp.myMatrix[10] = 1 - 2 * x*x - 2 * y*y;
 
     return tmp;
+}
+
+std::string MyQuat::getStr() {
+    return "w: " + std::to_string(w) + " x: " + std::to_string(v.x) + " y: " + std::to_string(v.y) + " z: " + std::to_string(v.z);
 }

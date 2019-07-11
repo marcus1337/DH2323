@@ -1,4 +1,6 @@
-﻿cl : Command line warning D9035: option 'Gm' has been deprecated and will be removed in a future release
-  main.cpp
-c:\users\marcus\desktop\skolaai\interactivegraphics\anim2_no_unity\tanklab\main.cpp(139): warning C4018: '<': signed/unsigned mismatch
-  tankLab.vcxproj -> C:\Users\Marcus\Desktop\skolaAI\interactiveGraphics\anim2_no_unity\tankLab\.\Debug\tankLab.exe
+﻿BoundingSphere.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/SAFESEH' specification
+glaux.lib(image.obj) : error LNK2026: module unsafe for SAFESEH image.
+glaux.lib(tkimage.obj) : error LNK2026: module unsafe for SAFESEH image.
+glaux.lib(tkdib.obj) : error LNK2026: module unsafe for SAFESEH image.
+glaux.lib(tk.obj) : error LNK2026: module unsafe for SAFESEH image.
+.\Debug/tankLab.exe : fatal error LNK1281: Unable to generate SAFESEH image.

@@ -6,7 +6,7 @@
 
 #include "tgaloader.h" 
 
- #ifndef IN 
+#ifndef IN 
 #define IN 
 #endif 
   

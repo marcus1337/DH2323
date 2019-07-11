@@ -1,8 +1,9 @@
 //Introductory matrix class
+#ifndef  MATRIX_H  
+#define  MATRIX_H
+
 #include <math.h>
-
 #include "windows.h"
-
 #include <gl/gl.h>            // standard OpenGL include
 #include <gl/glu.h>           // OpenGL utilties
 #include <glut.h>             // OpenGL utilties
@@ -31,5 +32,6 @@ class MyMatrix
 private:
 };
 
-
 }
+
+#endif

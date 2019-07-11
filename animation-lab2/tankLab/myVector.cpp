@@ -1,6 +1,6 @@
 #include "myVector.h"
 
-using namespace MyMathLab;
+using namespace MyMathLibrary;
 
 MyVector::MyVector(void)
 {
@@ -118,4 +118,119 @@ float MyVector::pointDist(MyPosition a, MyPosition b) {
     float ytmp = a.y - b.y;
     float ztmp = a.z - b.z;
     return sqrt(xtmp*xtmp + ytmp * ytmp + ztmp * ztmp);
+}
+
+std::string MyVector::getStr() {
+    return "(" + std::to_string(x) + "," + std::to_string(y) + "," + std::to_string(z) + ")";
+}
+
+MyPosition MyVector::toPos() {
+    return MyPosition(x, y, z);
+}
+
+bool MyVector::operator==(const MyVector& otherVec) {
+    return otherVec.x == x && otherVec.y == y && otherVec.z == z;
+}
+
+MyVector MyVector::operator + (const MyVector &other)
+{
+    MyVector vResult(0.0f, 0.0f, 0.0f);
+
+    vResult.x = x + other.x;
+    vResult.y = y + other.y;
+    vResult.z = z + other.z;
+
+    return vResult;
+}
+
+MyVector MyVector::operator + (void) const
+{
+    return *this;
+}
+
+MyVector MyVector::operator - (const MyVector &other)
+{
+    MyVector vResult(0.0f, 0.0f, 0.0f);
+
+    vResult.x = x - other.x;
+    vResult.y = y - other.y;
+    vResult.z = z - other.z;
+
+    return vResult;
+}
+
+MyVector MyVector::operator - (void) const
+{
+    MyVector vResult(-x, -y, -z);
+
+    return vResult;
+}
+
+MyVector MyVector::operator * (const MyVector &other)
+{
+    MyVector vResult(0.0f, 0.0f, 0.0f);
+
+    vResult.x = x * other.x;
+    vResult.y = y * other.y;
+    vResult.z = z * other.z;
+
+    return vResult;
+}
+
+MyVector MyVector::operator * (const float scalar)
+{
+    MyVector vResult(0.0f, 0.0f, 0.0f);
+
+    vResult.x = x * scalar;
+    vResult.y = y * scalar;
+    vResult.z = z * scalar;
+
+    return vResult;
+}
+
+MyVector MyVector::operator / (const MyVector &other)
+{
+    MyVector vResult(0.0f, 0.0f, 0.0f);
+
+    vResult.x = x / other.x;
+    vResult.y = y / other.y;
+    vResult.z = z / other.z;
+
+    return vResult;
+}
+
+MyVector& MyVector::operator = (const MyVector &other)
+{
+    x = other.x;
+    y = other.y;
+    z = other.z;
+
+    return *this;
+}
+
+MyVector& MyVector::operator += (const MyVector &other)
+{
+    x += other.x;
+    y += other.y;
+    z += other.z;
+
+    return *this;
+}
+
+MyVector& MyVector::operator -= (const MyVector &other)
+{
+    x -= other.x;
+    y -= other.y;
+    z -= other.z;
+
+    return *this;
+}
+
+MyVector MyVector::multi(const float scalar, const MyVector &other)
+{
+    MyVector vResult(0.0f, 0.0f, 0.0f);
+    vResult.x = other.x * scalar;
+    vResult.y = other.y * scalar;
+    vResult.z = other.z * scalar;
+    return vResult;
 }

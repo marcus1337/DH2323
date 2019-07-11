@@ -1,11 +1,10 @@
 //Introductory quaternion class
-#include <math.h>
-#include "myVector.h"
-#include "mymatrix.h"
 #include <string>
-#include <iostream>
 
-namespace MyMathLab
+#include "myMatrix.h"
+#include "myVector.h"
+
+namespace MyMathLibrary
 {
 
 class MyQuat
@@ -25,16 +24,14 @@ class MyQuat
 		MyQuat getConjugate(void) const;	
 		MyQuat getInverse(void) const;
 
-        MyMathLibrary::MyMatrix convertToRotationMatrix(void) const;
+        MyMatrix convertToRotationMatrix(void) const;
 
         static MyVector rotate(float angle, MyVector axis, MyVector vecToRotate);
 
 		float w;
 		MyVector v;
 
-        std::string getStr() {
-            return "w: " + std::to_string(w) + " x: " + std::to_string(v.x) + " y: " + std::to_string(v.y) + " z: " + std::to_string(v.z);
-        }
+        std::string getStr();
 };
 
 

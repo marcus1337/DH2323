@@ -8,7 +8,7 @@
 
 #include "myVector.h"
 
-using namespace MyMathLab;
+using namespace MyMathLibrary;
 using namespace std;
 
 void BoundingSphere::printStuff() {

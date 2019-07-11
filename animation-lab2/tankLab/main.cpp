@@ -1,10 +1,13 @@
 #define WIN32_LEAN_AND_MEAN
 
+
+#pragma comment(lib, "glaux.lib")
 #pragma comment(lib, "opengl32.lib")
 #pragma comment(lib, "glu32.lib")
 #pragma comment(linker, "/subsystem:console")
 
 #include "windows.h"
+#include <mmsystem.h>
 
 #include <gl/gl.h>            // standard OpenGL include
 #include <gl/glu.h>           // OpenGL utilties
@@ -13,15 +16,14 @@
 //#include "myvector.h"
 //#include "mymatrix.h"
 #include "myQuat.h"
+#include "Particles.h"
+
 using namespace MyMathLibrary;
 
 #include "stdlib.h"
 #include "stdio.h"
-
 #include "objloader.h"
-
 #include <iostream>
-
 #include "BoundingSphere.h"
 
 ObjMesh* tankBody;
@@ -57,6 +59,10 @@ void sphereTests();
 void drawSphere(float x, float y, float z);
 void customDraw(ObjMesh* pMesh);
 
+Particles particles;
+
+//unsigned int texture[3];
+
 //our main routine
 int main(int argc, char *argv[])
 {
@@ -70,8 +76,10 @@ int main(int argc, char *argv[])
   glutCreateWindow("Basic Glut Application");
 
   //run our own drawing initialisation routine
-  init_drawing();
+  //glGenTextures(2, texture);
 
+  particles.init();
+  init_drawing();
   load_tank_objs();
   sphereTests();
 
@@ -86,9 +94,6 @@ int main(int argc, char *argv[])
   glutInitWindowSize(600,600);
   glutReshapeWindow(600,600);
 
-  //go into the main loop
-  //this loop won't terminate until the user exits the 
-  //application
   glutMainLoop();
   return 0;
 }
@@ -213,8 +218,6 @@ void sphereTests() {
     //std::cout << "X: " << xtmp << " Y: " << ytmp << " Z: " << ztmp << " ::" << bSphereBody.collision << "::" << std::endl;
 }
 
-using namespace MyMathLab;
-using namespace MyMathLibrary;
 
 float offX = 15;
 float offY = 101;
@@ -320,28 +323,32 @@ void prepareTranslationsSpheres(float x, float y, float z) { //xyz should in a r
     }
 }
 
-void testCollision(float x, float y, float z, MyVector ball) { //xyz should in a real program probably be added LAST, but we assume these to be 0,0,0
-
-
- //   std::cout << "X: " << xtmp << " Y: " << ytmp << " Z: " << ztmp << " ::" << bSphereBody.collision << "::" << std::endl;
+bool testCollision(float x, float y, float z, MyVector ball) { //xyz should in a real program probably be added LAST, but we assume these to be 0,0,0
+    std::cout << "X: " << xtmp << " Y: " << ytmp << " Z: " << ztmp << " ::" << bSphereBody.collision << "::" << std::endl;
+    bool result = false;
 
     if (bSphereBody.checkCollision(ball.x, ball.y, ball.z)) {
         std::cout << "Outer Bound Hit! " << std::endl;
+        return true;
 
         if(bSphereTurret.checkCollision(ball.x, ball.y, ball.z)) {
            std::cout << "TURRET " << bSphereTurret.getCoordStr() << std::endl;
+           result = true;
         }
 
         if(bSphereGunMain.checkCollision(ball.x, ball.y, ball.z)) {
            std::cout << "GUN_1 " << bSphereGunMain.getCoordStr() << std::endl;
+           result = true;
         }
         if(bSphereGunSecond.checkCollision(ball.x, ball.y, ball.z)) {
             std::cout << "GUN_2 " << bSphereGunSecond.getCoordStr() << std::endl;
+            result = true;
         }
 
         for (int i = 0; i < 14; i++)
             if(bSphereWheel[i].checkCollision(ball.x, ball.y, ball.z)) {
                 std::cout << "WHEEL_" << i << std::endl;
+                result = true;
             }
     }
 
@@ -351,11 +358,13 @@ void testCollision(float x, float y, float z, MyVector ball) { //xyz should in a
    // bSphereGunSecond.draw();
     for (int i = 0; i < 14; i++)
         bSphereWheel[i].draw();
+
+    return result;
 }
 
 void drawSphere(float x, float y, float z) {
         glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glColor4f(0, 1, 0.5, 0.5);
         glPushMatrix();
         glScalef(0.1, 0.1, 0.1);
@@ -378,7 +387,10 @@ void drawProjectile() {
 
 void draw_tank(float x, float y, float z)
 {
+    glBindTexture(GL_TEXTURE_2D, tankBody->m_BaseTexture);
+
 	glPushMatrix();
+
 	glTranslatef(x,y,z);
 	glScalef(0.1,0.1,0.1);
     glCallList(tankBodyID);
@@ -449,15 +461,17 @@ void draw(void)
   glLoadIdentity();
 
   glTranslatef(0.0,0.0,zPos);
-
   glRotatef(yRot,0.0,1.0,0.0);
   glRotatef(xPos, 1.0, 0.0, 0.0);
 
   prepareTranslationsSpheres(0,0,0);
-  testLineCollision(MyVector(-150,-0,-0), MyVector(xtmp,ytmp,ztmp) );
- // testCollision(0, 0, 0, MyVector(-1000,-1000,0));
- // drawProjectile();
+  //testLineCollision(MyVector(-150,-0,-0), MyVector(xtmp,ytmp,ztmp) );
+  particles.activated1 = testCollision(0, 0, 0, MyVector(xtmp, ytmp, ztmp));
+
+  drawProjectile();
   draw_tank(0.0, 0.0, 0.0);
+  particles.draw(xtmp, ytmp, ztmp);
+
   //customDraw(tankMainGun);
 
   glFlush();
@@ -471,6 +485,8 @@ void idle(void)
   //this is a good place to do animation
   //since there are no animations in this test, we can leave 
   //idle() empty
+   particles.onIdle();
+   glutPostRedisplay();
 }
 
 //key callback function - called whenever the user presses a 
@@ -558,6 +574,15 @@ void key(unsigned char k, int x, int y)
         break;
     case 'B':
         offX--;
+        break;
+
+    case 'c':
+        if(particles.g_nActiveSystem < 6)
+            particles.g_nActiveSystem++;
+        break;
+    case 'C':
+        if(particles.g_nActiveSystem > 0)
+            particles.g_nActiveSystem--;
         break;
 
 

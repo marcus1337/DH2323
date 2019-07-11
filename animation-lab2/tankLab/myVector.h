@@ -1,17 +1,17 @@
+#ifndef  VECTOR_H  
+#define  VECTOR_H
+
 #include <math.h>
 #include <string>
 
-namespace MyMathLab
+namespace MyMathLibrary
 {
-
     const double M_PI = 3.14159265358979323846;
     const double M_HALF_PI = 1.57079632679489661923;
-
     const double RAD = (M_PI / 180.0);
     const double PIOVER2 = (3.14159265358979323846 / 2);
-#define DEG2RAD(x) ((x)*M_PI/180.0)
-#define RAD2DEG(x) ((x)*180.0/M_PI)
-
+    #define DEG2RAD(x) ((x)*M_PI/180.0)
+    #define RAD2DEG(x) ((x)*180.0/M_PI)
 
     struct MyPosition
     {
@@ -45,26 +45,35 @@ namespace MyMathLab
 
 
         float getDotProduct(const MyVector &other) const;
-
         void normalise(void);
-        std::string getStr() {
-            return "(" + std::to_string(x) + "," + std::to_string(y) + "," + std::to_string(z) + ")";
-        }
 
-        MyPosition toPos() {
-            return MyPosition(x, y, z);
-        }
-
-        bool operator==(const MyVector& otherVec) {
-            return otherVec.x == x && otherVec.y == y && otherVec.z == z;
-        }
+        std::string getStr();
+        MyPosition toPos();
+        bool operator==(const MyVector& otherVec);
 
         MyVector scalarMulti(float scalarTmp);
 
         float x;
         float y;
         float z;
+
+        MyVector operator + (const MyVector &other);
+        MyVector operator - (const MyVector &other);
+        MyVector operator * (const MyVector &other);
+        MyVector operator / (const MyVector &other);
+
+        MyVector operator * (const float scalar);
+        static MyVector multi(const float scalar, const MyVector &other);
+
+        MyVector& operator = (const MyVector &other);
+        MyVector& operator += (const MyVector &other);
+        MyVector& operator -= (const MyVector &other);
+
+        MyVector operator + (void) const;
+        MyVector operator - (void) const;
     };
 
 
 }
+
+#endif

@@ -86,6 +86,7 @@
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention />
       <TargetMachine>MachineX86</TargetMachine>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -140,14 +141,21 @@
     <ClCompile Include="myQuat.cpp" />
     <ClCompile Include="myVector.cpp" />
     <ClCompile Include="ObjLoader.cpp" />
+    <ClCompile Include="Particles.cpp" />
+    <ClCompile Include="particleSystem.cpp" />
     <ClCompile Include="tgaloader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BoundingSphere.h" />
+    <ClInclude Include="GLAUX.H" />
+    <ClInclude Include="glext.h" />
+    <ClInclude Include="glut.h" />
     <ClInclude Include="myMatrix.h" />
     <ClInclude Include="myQuat.h" />
     <ClInclude Include="myVector.h" />
     <ClInclude Include="ObjLoader.h" />
+    <ClInclude Include="Particles.h" />
+    <ClInclude Include="particleSystem.h" />
     <ClInclude Include="tgaloader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
